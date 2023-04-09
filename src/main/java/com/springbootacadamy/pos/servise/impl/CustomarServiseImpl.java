@@ -1,12 +1,23 @@
 package com.springbootacadamy.pos.servise.impl;
 
 import com.springbootacadamy.pos.dto.CustomarDTO;
+import com.springbootacadamy.pos.dto.paginated.CustomarPeginatedDTO;
 import com.springbootacadamy.pos.dto.request.CustomarUpdateDTO;
+import com.springbootacadamy.pos.dto.response.CustomarResponseDTO;
 import com.springbootacadamy.pos.entity.Customar;
 import com.springbootacadamy.pos.repo.CustomarRepo;
 import com.springbootacadamy.pos.servise.CustomarServise;
+
+import com.springbootacadamy.pos.util.StandardRespons;
+import com.springbootacadamy.pos.util.mapper.CustomarMapper;
+import exception.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -21,6 +32,9 @@ public class CustomarServiseImpl implements CustomarServise {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CustomarMapper customarMapper;
 
     @Override
     public String saveCustomar(CustomarDTO customarDTO) {
@@ -86,25 +100,37 @@ public class CustomarServiseImpl implements CustomarServise {
     }
 
     @Override
+//    public List<CustomarDTO> getAllCustomars() {
+//        List<Customar>getAllCustomars=customarRepo.findAll();
+//
+//        if(getAllCustomars.size()>0) {
+//            List<CustomarDTO> customarDTOList= new ArrayList<>();
+//            for (Customar customar : getAllCustomars) {
+//                CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
+//                        customar.getCustomarName(),
+//                        customar.getCustomarAdderess(),
+//                        customar.getCustomarSalary(),
+//                        customar.getContactNumbers(),
+//                        customar.getNic(),
+//                        customar.isActiveStatus());
+//                customarDTOList.add(customarDTO);
+//            }
+//
+//        return customarDTOList;
+//        }else {
+//            throw new NotFoundException("No Data Found For This Request");
+//        }
+//    }
+
     public List<CustomarDTO> getAllCustomars() {
         List<Customar>getAllCustomars=customarRepo.findAll();
 
         if(getAllCustomars.size()>0) {
-            List<CustomarDTO> customarDTOList= new ArrayList<>();
-            for (Customar customar : getAllCustomars) {
-                CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
-                        customar.getCustomarName(),
-                        customar.getCustomarAdderess(),
-                        customar.getCustomarSalary(),
-                        customar.getContactNumbers(),
-                        customar.getNic(),
-                        customar.isActiveStatus());
-                customarDTOList.add(customarDTO);
-            }
 
-        return customarDTOList;
+            List<CustomarDTO>customarDTOList=modelMapper.map(getAllCustomars,new TypeToken<List<CustomarDTO>>(){}.getType());
+            return  customarDTOList;
         }else {
-            throw new RuntimeException("No Data");
+            throw new NotFoundException("No Data Found For This Request");
         }
     }
 
@@ -165,6 +191,24 @@ public class CustomarServiseImpl implements CustomarServise {
            throw new RuntimeException("No data");
        }
 
+    }
+
+    @Override
+    public CustomarPeginatedDTO getAllActiveCustomarsWithSatus(boolean activeStatus, int page, int size) {
+
+        Page<Customar>customarPage=customarRepo.findAllByActiveStatusEquals(activeStatus, PageRequest.of(page, size));
+
+        if(customarPage.getSize()<1){
+            throw new NotFoundException("No Data");
+
+        }
+        //List<CustomarResponseDTO> list =modelMapper.map(customarPage,new TypeToken<List<CustomarResponseDTO>>(){}.getType());
+        CustomarPeginatedDTO customarPeginatedDTO=  new CustomarPeginatedDTO(
+        customarMapper.listToDtoPage(customarPage),
+
+        customarRepo.countAllByActiveStatusEquals(activeStatus)
+        );
+        return customarPeginatedDTO;
     }
 
 

@@ -4,6 +4,7 @@ import com.springbootacadamy.pos.dto.ItemDTO;
 import com.springbootacadamy.pos.dto.response.ItemDTOResponse;
 import com.springbootacadamy.pos.entity.Item;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface ItemMapper {
     ItemDTOResponse itemToDto(Item item);
 
     Item dtoToItem(ItemDTO itemDTO);
+
+    List<ItemDTOResponse> listDtoToPage(Page<Item> itemPage);
 
 }

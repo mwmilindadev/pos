@@ -1,6 +1,7 @@
 package com.springbootacadamy.pos.controller;
 
 import com.springbootacadamy.pos.dto.ItemDTO;
+import com.springbootacadamy.pos.dto.paginated.ItemPaginatedDTO;
 import com.springbootacadamy.pos.dto.request.ItemUpdateDTO;
 import com.springbootacadamy.pos.dto.response.ItemDTOResponse;
 import com.springbootacadamy.pos.servise.ItemSerivse;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
 import java.util.List;
 
 @RestController
@@ -50,9 +52,17 @@ public class ItemController {
     @GetMapping(path = "/get-item-by-id-mapstruct",
             params = "id")
 
-    public ItemDTOResponse getItemByIdMapstruct(@RequestParam(name = "id") int itemId) {
+//    public ItemDTOResponse getItemByIdMapstruct(@RequestParam(name = "id") int itemId) {
+//        ItemDTOResponse itemDTOResponse = itemSerivse.getItemByIdMapstruct(itemId);
+//        return itemDTOResponse;
+//
+//
+//    }
+
+    public ResponseEntity<StandardRespons> getItemByIdMapstruct(@RequestParam(name = "id") int itemId) {
         ItemDTOResponse itemDTOResponse = itemSerivse.getItemByIdMapstruct(itemId);
-        return itemDTOResponse;
+        return new ResponseEntity<StandardRespons>(
+                new StandardRespons(200,"OK",itemDTOResponse),HttpStatus.OK);
 
 
     }
@@ -93,6 +103,20 @@ public class ItemController {
     public ResponseEntity<StandardRespons> getItemByNameMapstruct(@RequestParam(value = "name") String ItemName) {
         List<ItemDTOResponse> itemDTOResponseList = itemSerivse.getItemByNameMapstruct(ItemName);
         return new ResponseEntity<StandardRespons>(new StandardRespons(200, "ok", itemDTOResponseList), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get-atems-by-activeStatus",
+    params = {"activeStatus","page","size"})
+    public ResponseEntity<StandardRespons>getItemsByactiveTatusPaginated(
+            @RequestParam(value = "activeStatus") boolean activeStatus,
+            @RequestParam(value = "page")int page,
+            @RequestParam(value = "size") @Max(50) int size
+    ){
+        //List<ItemDTOResponse>itemDTOResponseList=itemSerivse.getItemsByActiveStatu(activeStatus,page,size);
+        ItemPaginatedDTO itemPaginatedDTO=itemSerivse.getItemsByActiveStatusPaginated(activeStatus,page,size);
+
+        return new ResponseEntity<StandardRespons>(
+                new StandardRespons(200,"Success",itemPaginatedDTO),HttpStatus.OK);
     }
 
 }

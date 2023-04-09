@@ -1,6 +1,7 @@
 package com.springbootacadamy.pos.servise;
 
 import com.springbootacadamy.pos.dto.CustomarDTO;
+import com.springbootacadamy.pos.dto.paginated.CustomarPeginatedDTO;
 import com.springbootacadamy.pos.dto.request.CustomarUpdateDTO;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface CustomarServise {
     List<CustomarDTO> getAllCustomarsByActiveState(boolean status);
 
     List<CustomarDTO> getAllCustomarsWithActiveStateAndId(boolean activeStatus, int customarId);
+
+    CustomarPeginatedDTO getAllActiveCustomarsWithSatus(boolean activeStatus, int page, int size);
 }
