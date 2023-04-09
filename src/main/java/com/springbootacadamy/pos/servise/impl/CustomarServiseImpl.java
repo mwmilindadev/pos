@@ -151,17 +151,19 @@ public class CustomarServiseImpl implements CustomarServise {
     public List<CustomarDTO> getAllCustomarsByActiveState(boolean status) {
         List<Customar> customarList = customarRepo.findAllByActiveStatusEquals(status);
         if (customarList.size()>0){
-            List<CustomarDTO>customarDTOList = new ArrayList<>();
-            for (Customar customar:customarList){
-                CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
-                        customar.getCustomarName(),
-                        customar.getCustomarAdderess(),
-                        customar.getCustomarSalary(),
-                        customar.getContactNumbers(),
-                        customar.getNic(),
-                        customar.isActiveStatus());
-                customarDTOList.add(customarDTO);
-            }
+            //List<CustomarDTO>customarDTOList = new ArrayList<>();
+            List<CustomarDTO> customarDTOList= modelMapper.map(customarList,new TypeToken<List<CustomarDTO>>(){}.getType());
+             // List<CustomarDTO> customarDTOList=customarMapper.listToDto(customarList);
+//            for (Customar customar:customarList){
+//                CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
+//                        customar.getCustomarName(),
+//                        customar.getCustomarAdderess(),
+//                        customar.getCustomarSalary(),
+//                        customar.getContactNumbers(),
+//                        customar.getNic(),
+//                        customar.isActiveStatus());
+//                customarDTOList.add(customarDTO);
+//            }
            return customarDTOList;
         }else {
             throw new RuntimeException("No data Found");
@@ -174,18 +176,21 @@ public class CustomarServiseImpl implements CustomarServise {
        List<Customar>customarList =customarRepo.findAllByActiveStatusEqualsAndCustomarIdEquals(activeStatus,customarId);
 
        if(customarList.size()>0) {
-           List<CustomarDTO> customarDTOList = new ArrayList<>();
-           for (Customar customar : customarList) {
-               CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
-                       customar.getCustomarName(),
-                       customar.getCustomarAdderess(),
-                       customar.getCustomarSalary(),
-                       customar.getContactNumbers(),
-                       customar.getNic(),
-                       customar.isActiveStatus());
-               customarDTOList.add(customarDTO);
-
-           }
+//           List<CustomarDTO> customarDTOList = new ArrayList<>();
+           List<CustomarDTO>customarDTOList=modelMapper.map(customarList,new TypeToken<List<CustomarDTO>>(){}.getType());
+           //List<CustomarDTO>customarDTOList=customarMapper.listToDto(customarList);
+//
+//           for (Customar customar : customarList) {
+//               CustomarDTO customarDTO = new CustomarDTO(customar.getCustomarId(),
+//                       customar.getCustomarName(),
+//                       customar.getCustomarAdderess(),
+//                       customar.getCustomarSalary(),
+//                       customar.getContactNumbers(),
+//                       customar.getNic(),
+//                       customar.isActiveStatus());
+//               customarDTOList.add(customarDTO);
+//
+//           }
            return customarDTOList;
        }else {
            throw new RuntimeException("No data");
