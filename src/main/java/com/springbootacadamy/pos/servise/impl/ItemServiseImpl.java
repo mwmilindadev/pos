@@ -142,6 +142,20 @@ public class ItemServiseImpl implements ItemSerivse {
         return itemPaginatedDTO;
     }
 
+    @Override
+    public ItemPaginatedDTO getAllItemByPeginated(int page, int size) {
+        Page<Item>itemPage=itemRepo.findAll(PageRequest.of(page, size));
+        if(itemPage.getSize()<1){
+           throw new NotFoundException("NoData");
+        }
+
+        ItemPaginatedDTO itemPaginatedDTO = new ItemPaginatedDTO(
+           itemMapper.listDtoToPage(itemPage),
+           itemRepo.count()
+        );
+        return itemPaginatedDTO;
+    }
+
 }
 
 

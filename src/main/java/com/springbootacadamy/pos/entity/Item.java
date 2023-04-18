@@ -4,6 +4,7 @@ import com.springbootacadamy.pos.entity.enums.MeasuringUnitType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="item")
@@ -37,6 +38,9 @@ public class Item {
 
     @Column(name = "active_status",columnDefinition = "TINYINT default 0")
     private boolean activeStatus;
+
+    @OneToMany(mappedBy="items")
+    private Set<OrderDetais> orerDetails;
 
 
 }

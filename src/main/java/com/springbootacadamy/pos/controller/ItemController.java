@@ -119,4 +119,15 @@ public class ItemController {
                 new StandardRespons(200,"Success",itemPaginatedDTO),HttpStatus.OK);
     }
 
+
+    @GetMapping(path = "/get-all-item-peginated",
+    params = {"page","size"})
+    public ResponseEntity<StandardRespons>getAllItemPeginated(@RequestParam(value = "page")int page,
+                                                              @RequestParam(value ="size")@Max(50)int size){
+
+        ItemPaginatedDTO itemPaginatedDTO=itemSerivse.getAllItemByPeginated(page,size);
+        return new ResponseEntity<StandardRespons>(new StandardRespons(200,"ok",itemPaginatedDTO)
+        ,HttpStatus.OK);
+    }
+
 }

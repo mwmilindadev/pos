@@ -8,6 +8,7 @@ import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Entity
 @Table(name="customar")
@@ -38,6 +39,9 @@ public class Customar {
 
     @Column(name="active_status",columnDefinition = "TINYINT default 0")
     private boolean activeStatus;
+
+    @OneToMany(mappedBy = "customar")
+    private Set<Orders> ordersSet;
 
     public Customar() {
     }
