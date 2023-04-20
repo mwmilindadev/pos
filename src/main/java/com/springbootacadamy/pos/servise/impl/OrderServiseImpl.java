@@ -1,6 +1,9 @@
 package com.springbootacadamy.pos.servise.impl;
 
+import com.springbootacadamy.pos.dto.paginated.OrderDetailsPaginatedDTO;
+import com.springbootacadamy.pos.dto.queryinterface.OrderDetailsInterface;
 import com.springbootacadamy.pos.dto.request.RequestOrderSaveDTO;
+import com.springbootacadamy.pos.dto.response.ResponseOrderDtailsDTO;
 import com.springbootacadamy.pos.entity.OrderDetais;
 import com.springbootacadamy.pos.entity.Orders;
 import com.springbootacadamy.pos.repo.CustomarRepo;
@@ -11,6 +14,7 @@ import com.springbootacadamy.pos.servise.OrderServise;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -58,5 +62,12 @@ public class OrderServiseImpl implements OrderServise {
             return "Saved";
         }
        return null;
+    }
+
+    @Override
+    public OrderDetailsPaginatedDTO getAllOrderDetails(boolean b, int page, int size) {
+        List<OrderDetailsInterface> orderDtailsDTOS=orderRepo.getAllOrderDetails(b, PageRequest.of(page,size));
+        System.out.println(orderDtailsDTOS);
+        return null;
     }
 }
