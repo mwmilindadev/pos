@@ -15,6 +15,12 @@ import java.util.List;
 @Repository
 @EnableJpaRepositories
 public interface OrderRepo extends JpaRepository<Orders,Integer> {
-    @Query(value = "select  c.customar_name,c.customar_address,c.conatct_numbers,d.order_date,d.total from  customar c,orders d where active_status=?1 and c.customar_id=d.customar_id ",nativeQuery = true)
+    @Query(value = "select  c.customar_name as customarName,c.customar_address as customarAdderess," +
+            "c.conatct_numbers as contactNumbers,d.order_date as date,d.total total " +
+            "from  customar c,orders d " +
+            "where active_status=?1 and c.customar_id=d.customar_id ",nativeQuery = true)
     List<OrderDetailsInterface> getAllOrderDetails(boolean b, Pageable pageable);
+
+    @Query(value = "select count(*) from   customar c,orders d where active_status=?1 and c.customar_id=d.customar_id",nativeQuery = true)
+    long countAllDetails(boolean b);
 }

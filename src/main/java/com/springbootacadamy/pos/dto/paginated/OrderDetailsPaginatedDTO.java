@@ -12,5 +12,5 @@ import java.util.List;
 @Data
 public class OrderDetailsPaginatedDTO {
     List<ResponseOrderDtailsDTO> list;
-    private  Long count;
+    private  long count;
 }

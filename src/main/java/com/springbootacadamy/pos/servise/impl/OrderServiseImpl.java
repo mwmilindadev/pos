@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,6 +69,20 @@ public class OrderServiseImpl implements OrderServise {
     public OrderDetailsPaginatedDTO getAllOrderDetails(boolean b, int page, int size) {
         List<OrderDetailsInterface> orderDtailsDTOS=orderRepo.getAllOrderDetails(b, PageRequest.of(page,size));
         System.out.println(orderDtailsDTOS);
-        return null;
+        //List<ResponseOrderDtailsDTO> list= new ArrayList<>();
+       /* for (OrderDetailsInterface c:orderDtailsDTOS){
+            ResponseOrderDtailsDTO  r = new ResponseOrderDtailsDTO(
+                    c.getCustomarName(),
+                    c.getCustomarAdderess(),
+                    c.getContactNumbers(),
+                    c.getDate(),
+                    c.getTotal()
+            );
+            list.add(r);
+
+        }*/
+        List<ResponseOrderDtailsDTO>list=modelMapper.map(orderDtailsDTOS,new TypeToken<List<ResponseOrderDtailsDTO>>(){}.getType());
+        OrderDetailsPaginatedDTO orderDetailsPaginatedDTO= new OrderDetailsPaginatedDTO(list,orderRepo.countAllDetails(b));
+        return orderDetailsPaginatedDTO;
     }
 }
